@@ -1,0 +1,36 @@
+<!-- home.html -->
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <title>Home Page</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Home Page</h1>
+        <nav>
+            <a href="{% url 'login' %}">Login</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Introduction</h2>
+            <p>This is a simple home page for our application. You can navigate to different sections using the links above.</p>
+        </section>
+        <section id="dynamic-content">
+            <h2>Dynamic Content</h2>
+            <p>This content can be updated with JavaScript!</p>
+            <button id="update-content-btn">Update Content</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Your Company</p>
+    </footer>
+    <script src="{% static 'js/home.js' %}"></script>
+</body>
+</html>
