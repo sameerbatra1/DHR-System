@@ -18,7 +18,8 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     user_type = models.CharField(max_length=50)

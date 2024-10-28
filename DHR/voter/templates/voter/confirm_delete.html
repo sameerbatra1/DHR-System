@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter List</title>
+    <link rel="stylesheet" href="{% static 'css/voter.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <!-- Example button that triggers deletion -->
+    <button class="delete-btn" data-voter-id="{{ voter.VoterID }}">Delete</button>
+
+    <!-- CSRF token for AJAX request -->
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+    <script>
+        $(document).ready(function() {
+            // Handle the delete button click event
+            $('.delete-btn').click(function(event) {
+                event.preventDefault(); // Prevent default form submission
+                var voterId = $(this).data('voter-id'); // Get the voter ID
+
+                // Show confirmation alert
+                var confirmDelete = confirm("Are you sure you want to delete voter ID " + voterId + "?");
+
+                if (confirmDelete) {
+                    $.ajax({
+                        url: '/delete_voter/' + voterId + '/', // Adjust this URL to match your routing
+                        type: 'POST',
+                        data: {
+                            'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                alert(response.message); // Show success message
+                                location.reload(); // Reload the page to see the changes
+                            } else {
+                                alert(response.message); // Show error message
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert("An error occurred: " + error); // Handle error
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

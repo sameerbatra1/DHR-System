@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Voter Information</title>
+    <link rel="stylesheet" href="{% static 'css/update_voter.css' %}">
+</head>
+<body>
+    <h1>Update Voter Information</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update Voter</button>
+    </form>
+
+    <a href="{% url 'view_all_voters' %}">Back to Voter List</a>
+</body>
+</html>
