@@ -9,9 +9,7 @@
 </head>
 <body>
     <h1>Update Voter Information</h1>
-
     <form method="POST">
-        {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Update Voter</button>
     </form>

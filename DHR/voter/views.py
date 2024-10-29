@@ -59,60 +59,77 @@ def add_voter(request):
     else:
         form = VoterForm()
     return JsonResponse({'message': 'Error Occurred!'}, status=400)
-    # return JsonResponse({'message': 'Error Occured!!'})
-    # try:
-    #     # Parse the JSON data from the request body
-    #     voter_data = json.loads(request.body)
-        
-    #     # Create a new Voter object
-    #     voter = Voter(
-    #         government_number=voter_data.get('government_number'),
-    #         name=voter_data.get('name'),
-    #         father_name=voter_data.get('father_name'),
-    #         gender=voter_data.get('gender'),
-    #         CNIC=voter_data.get('CNIC'),
-    #         address=voter_data.get('address'),
-    #         mobile_number=voter_data.get('mobile_number'),
-    #         family_code=voter_data.get('family_code') or None  # Set to None if empty
-    #     )
-        
-    #     # Save the voter to the database
-    #     voter.save()
-        
-    #     return JsonResponse({"message": "Voter added successfully!"}, status=201)
-    # except json.JSONDecodeError:
-    #     return JsonResponse({"error": "Invalid JSON"}, status=400)
-    # except Exception as e:
-    #     return JsonResponse({"error": str(e)}, status=400)
+
 
 def view_all_voter(request):
-    voters = Voter.objects.all().order_by('name')  # Fetch all voters, ordered alphabetically by name
+    # Fetch all voters from the MongoDB collection and sort them by name
+    voters = list(voter_collection.find().sort('first_name', 1))  # Adjust field name if necessary
+
+    # Optionally, you can convert MongoDB ObjectId to string for easier use in templates
+    for voter in voters:
+        voter['_id'] = str(voter['_id'])  # Convert ObjectId to string
+
     return render(request, 'voter/view_all_voter.html', {'voters': voters})
+
+
 @csrf_exempt
-def delete_voter(request, VoterID):
+def delete_voter(request, user_id):
     if request.method == "POST":
         try:
-            voter = Voter.objects.get(VoterID=VoterID)
-            voter.delete()
-            return JsonResponse({'success': True, 'message': 'Voter deleted successfully'})
-        except Voter.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'Voter not found'})
+            # Attempt to delete the voter with the given user_id
+            result = voter_collection.delete_one({'user_id': user_id})
+            if result.deleted_count > 0:
+                return JsonResponse({'success': True, 'message': 'Voter deleted successfully'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Voter not found'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f'An error occurred: {str(e)}'})
     else:
-        return JsonResponse({'success': False, 'message': 'Invalid request method'})
-    
-def update_voter(request, VoterID):
-    # Get the voter object using the VoterID or return 404 if not found
-    voter = get_object_or_404(Voter, VoterID=VoterID)
+        return JsonResponse({'success': False, 'message': 'Invalid request method'})    
+
+
+@csrf_exempt
+def update_voter(request, user_id):
+    # Get the voter object using the user_id or return 404 if not found
+    voter = voter_collection.find_one({'user_id': user_id})
+    if not voter:
+        return JsonResponse({'message': 'Voter not found'}, status=404)
     
     if request.method == 'POST':
-        form = VoterForm(request.POST, instance=voter)
+        form = VoterForm(request.POST)
         if form.is_valid():
-            form.save()  # Save the updated voter details
+            # Prepare the updated voter data
+            updated_data = {
+                "government_number": form.cleaned_data['government_number'],
+                "first_name": form.cleaned_data['first_name'],
+                "last_name": form.cleaned_data['last_name'],
+                "father_name": form.cleaned_data['father_name'],
+                "gender": form.cleaned_data['gender'],
+                "CNIC": form.cleaned_data['cnic'],  # Ensure this matches your form field name
+                "address": form.cleaned_data['address'],
+                "mobile_number": form.cleaned_data['mobile_number'],
+                "family_code": form.cleaned_data.get('family_code') or user_id,  # Use user_id if family_code is empty
+                "block_number": form.cleaned_data['block_number']
+            }
+
+            # Update the voter in the database
+            voter_collection.update_one({'user_id': user_id}, {'$set': updated_data})
             return JsonResponse({'message': 'Voter updated successfully'}, status=200)
+
     else:
-        form = VoterForm(instance=voter)  # Prepopulate the form with voter's data
-    
+        # Prepopulate the form with voter's data
+        initial_data = {
+            "government_number": voter.get('government_number', ''),
+            "first_name": voter.get('first_name', ''),
+            "last_name": voter.get('last_name', ''),
+            "father_name": voter.get('father_name', ''),
+            "gender": voter.get('gender', ''),
+            "cnic": voter.get('CNIC', ''),  # Make sure the key matches your form field name
+            "address": voter.get('address', ''),
+            "mobile_number": voter.get('mobile_number', ''),
+            "family_code": voter.get('family_code', ''),
+            "block_number": voter.get('block_number', '')
+        }
+        form = VoterForm(initial=initial_data)  # Use the initial_data to populate the form
+
     return render(request, 'voter/update_voter.html', {'form': form, 'voter': voter})
-
-
-
