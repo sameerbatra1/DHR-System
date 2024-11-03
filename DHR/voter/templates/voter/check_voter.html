@@ -7,7 +7,33 @@
     <title>All Voters</title>
     <link rel="stylesheet" href="{% static 'css/view_all_voter.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Load jQuery -->
-    <script src="{% static 'js/delete_voter.js' %}"></script> <!-- Load your external JS file -->
+    <script>
+        function checkVoter(userId) {
+            fetch(`/check_voter/${userId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                } else {
+                    alert("Something went wrong.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+    <style>
+        .strikethrough {
+            text-decoration: line-through;
+            color: gray; /* Optional: Change color to indicate strikethrough */
+        }
+    </style>
 </head>
 <body>
     <h1>List of All Voters</h1>
@@ -31,10 +57,9 @@
         </thead>
         <tbody>
             {% for voter in voters %}
-            <tr>
+            <tr class="{% if voter.checked %}strikethrough{% endif %}">
                 <td>{{ voter.user_id }}</td>
                 <td>{{ voter.government_number }}</td>
-                {% comment %} <td>{{ voter.name }}</td> {% endcomment %}
                 <td>{{ voter.first_name }}</td>
                 <td>{{ voter.last_name }}</td>
                 <td>{{ voter.father_name }}</td>
@@ -46,8 +71,7 @@
                 <td>{{ voter.family_code }}</td>
                 <td>{{ voter.block_number }}</td>
                 <td>
-                    <a href="{% url 'update_voter' voter.user_id %}">Update</a>
-                    <button class="delete-btn" data-voter-id="{{ voter.user_id }}">Delete</button>
+                    <button class="check-btn" onclick="checkVoter({{ voter.user_id }})">Check</button>
                 </td>
             </tr>
             {% empty %}
@@ -56,6 +80,7 @@
             </tr>
             {% endfor %}
         </tbody>
+        
     </table>
 </body>
 </html>

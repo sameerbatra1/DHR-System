@@ -84,11 +84,16 @@
                 <input type="text" id="family_code" name="family_code" pattern="\d+" title="Numeric family code only">
             </div>
 
-            <!-- Block Number -->
+            <div class="form-group">
+                <label for="mohalla_name">Mohalla Name:</label>
+                {{ form.mohalla_name }}
+            </div>
+
+            {% comment %} <!-- Block Number -->
             <div class="form-group">
                 <label for="block_number">Block Number:</label>
                 <input type="text" id="block_number" name="block_number" maxlength="10">
-            </div>
+            </div> {% endcomment %}
 
             <button type="submit" class="submit-btn">Add Voter</button>
         </form>

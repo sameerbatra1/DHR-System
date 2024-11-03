@@ -1,0 +1,37 @@
+<!-- templates/voter/add_voter.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Voter</title>
+    <link rel="stylesheet" href="{% static 'css/voter.css' %}">
+    <script>
+        {% comment %} // Function to show the alert when a voter is added successfully
+        function showSuccessAlert() {
+            let addAnother = confirm("Voter added successfully! Do you want to add another one?");
+            if (addAnother) {
+                // If yes, reload the form
+                window.location.reload();
+            } else {
+                // If no, redirect to view_all_voters
+                window.location.href = "{% url 'view_all_voters' %}";
+            }
+        } {% endcomment %}
+    </script>
+</head>
+<body>
+    <h2>Add Mohalla</h2>
+    <div class="form-container">
+        <h2>Add Mohalla</h2>
+        <form method="POST" action="{% url 'add_mohalla' %}">
+            <!-- Government Number -->
+            <div class="form-group">
+                <label for="mohalla_name">Mohalla Name: </label>
+                <input type="text" id="mohalla_name" name="mohalla_name" maxlength="150" required>
+            </div>
+            <button type="submit" class="submit-btn">Add Voter</button>
+        </form>
+</body>
+</html>

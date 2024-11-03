@@ -30,3 +30,8 @@ th {
 tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+
+.strikethrough {
+    text-decoration: line-through;
+    color: gray; /* Optional: Change color to indicate strikethrough */
+}
