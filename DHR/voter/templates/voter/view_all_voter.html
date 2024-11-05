@@ -5,57 +5,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Voters</title>
-    <link rel="stylesheet" href="{% static 'css/view_all_voter.css' %}">
+    <link rel="stylesheet" href="{% static 'css/view_all_voter.css' %}"> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Load jQuery -->
     <script src="{% static 'js/delete_voter.js' %}"></script> <!-- Load your external JS file -->
+    <script src="{% static 'js/view_voter.js' %}"></script>
 </head>
 <body>
-    <h1>List of All Voters</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Voter ID</th>
-                <th>Government Number</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Father Name</th>
-                <th>Gender</th>
-                <th>CNIC</th>
-                <th>Address</th>
-                <th>Mohalla Name</th>
-                <th>Mobile Number</th>
-                <th>Family Code</th>
-                <th>Block Code</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for voter in voters %}
-            <tr>
-                <td>{{ voter.user_id }}</td>
-                <td>{{ voter.government_number }}</td>
-                {% comment %} <td>{{ voter.name }}</td> {% endcomment %}
-                <td>{{ voter.first_name }}</td>
-                <td>{{ voter.last_name }}</td>
-                <td>{{ voter.father_name }}</td>
-                <td>{{ voter.gender }}</td>
-                <td>{{ voter.CNIC }}</td>
-                <td>{{ voter.address }}</td>
-                <td>{{ voter.mohalla_name }}</td>
-                <td>{{ voter.mobile_number }}</td>
-                <td>{{ voter.family_code }}</td>
-                <td>{{ voter.block_number }}</td>
-                <td>
-                    <a href="{% url 'update_voter' voter.user_id %}">Update</a>
-                    <button class="delete-btn" data-voter-id="{{ voter.user_id }}">Delete</button>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="11">No voters found.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    
+        <div class="inner_div">
+            <div class="header">
+                <h2 class="heading">List of All Voters</h2>
+                <button class="create_button" onclick="GoToAdd()">Create</button>
+            </div>
+            
+            <div class="show-data">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Voter ID</th>
+                            <th>Government Number</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Father Name</th>
+                            <th>Gender</th>
+                            <th>CNIC</th>
+                            <th>Address</th>
+                            <th>Mohalla Name</th>
+                            <th>Mobile Number</th>
+                            <th>Family Code</th>
+                            <th>Block Code</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for voter in voters %}
+                        <tr>
+                            <td>{{ voter.user_id }}</td>
+                            <td>{{ voter.government_number }}</td>
+                            {% comment %} <td>{{ voter.name }}</td> {% endcomment %}
+                            <td>{{ voter.first_name }}</td>
+                            <td>{{ voter.last_name }}</td>
+                            <td>{{ voter.father_name }}</td>
+                            <td>{{ voter.gender }}</td>
+                            <td>{{ voter.CNIC }}</td>
+                            <td>{{ voter.address }}</td>
+                            <td>{{ voter.mohalla_name }}</td>
+                            <td>{{ voter.mobile_number }}</td>
+                            <td>{{ voter.family_code }}</td>
+                            <td>{{ voter.block_number }}</td>
+                            <td>
+                                <a href="{% url 'update_voter' voter.user_id %}" class="update">Update</a>
+                                <button class="delete-btn" data-voter-id="{{ voter.user_id }}">Delete</button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="11">No voters found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
 </body>
 </html>

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Voter</title>
-    <link rel="stylesheet" href="{% static 'css/voter.css' %}">
+    <link rel="stylesheet" href="{% static 'css/add_voter.css' %}">
     <script>
         // Function to show the alert when a voter is added successfully
         function showSuccessAlert() {
@@ -22,10 +22,13 @@
     </script>
 </head>
 <body>
-    <h2>Add Voter</h2>
+    <div class="header">
+        <h2 >Add Voter</h2>
+        <!-- Add button to redirect to view_all_voters -->
+        <button class="back_btn" onclick="window.location.href='{% url 'view_all_voters' %}'">View All Voters</button>
+    </div>
     <div class="form-container">
-        <h2>Add Voter</h2>
-        <form method="POST" action="{% url 'add_voter' %}">
+        <form method="POST" action="{% url 'add_voter' %}" class="form">
             <!-- Government Number -->
             <div class="form-group">
                 <label for="government_number">Government Number:</label>
@@ -97,9 +100,9 @@
 
             <button type="submit" class="submit-btn">Add Voter</button>
         </form>
-    <!-- Add button to redirect to view_all_voters -->
-    <br>
-    <button onclick="window.location.href='{% url 'view_all_voters' %}'">View All Voters</button>
+    
+    <br> 
+    
 
     <!-- Trigger the success alert when voter is added successfully -->
     {% comment %} {% if success %}
