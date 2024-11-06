@@ -9,46 +9,85 @@ body{
     height: 100vh;
     display: flex;
 }
+
+.header{
+    width: 100%;
+    background-color: #2c3e50;
+    height: 50px;
+}
+
 .main_container{
     width: 100vw;
     height: 100vh;
 }
-.top_box{
-    border: 2px solid black;
+.top_box, .bottom_box{
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
     width: 50%;
     height: 30%;
     margin-left: 25%;
     margin-top: 5%;  
     display: flex;
+    padding: 10px;
     /* align-items: center; */
 }
 .box_1{
-    border: 2px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #2c3e50;
+    cursor: pointer;
+    /* border: 2px solid red; */
+    border-radius: 6px;
     width: 50%;
     height: 100%;
 }
 .box_2{
-    border: 2px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #2c3e50;
+    cursor: pointer;
+    /* border: 2px solid red; */
+    border-radius: 6px;
     width: 50%;
     height: 100%;
     margin-left: 5%;
 }
 .box_3{
-    border: 2px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #2c3e50;
+    cursor: pointer;
+    /* border: 2px solid #2c3e50; */
+    border-radius: 6px;
     width: 50%;
     height: 100%;
 }
 .box_4{
-    border: 2px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: #2c3e50;
+    cursor: pointer;
+    /* border: 2px solid red; */
+    border-radius: 6px;
     width: 50%;
     height: 100%;
     margin-left: 5%;
 }
-.bottom_box{
+
+/* .bottom_box{
     border: 2px solid black;
     width: 50%;
     height: 30%;
     margin-left: 25%;
     margin-top: 5%;  
     display: flex;
-}
+} */

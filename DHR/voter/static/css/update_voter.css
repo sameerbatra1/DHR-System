@@ -55,31 +55,31 @@ body {
 
 .form-group input,
 .form-group select {
-    width: 100%; /* Full width for inputs and selects */
-    padding: 10px; /* Padding inside inputs */
-    border: 1px solid #ccc; /* Light border for inputs */
-    border-radius: 4px; /* Slightly rounded corners */
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
     box-sizing: border-box; 
     font-size: 16px;
 }
 
 .form-group input:focus,
 .form-group select:focus {
-    border-color: #007bff; /* Change border color on focus */
-    outline: none; /* Remove default outline */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle shadow on focus */
+    border-color: #007bff; 
+    outline: none; 
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
 }
 
 .submit_btn {
-    background-color: #2c3e50; /* Bootstrap primary color */
-    color: #fff; /* White text color */
-    padding: 10px 15px; /* Padding inside the button */
-    border: none; /* Remove border */
-    border-radius: 4px; /* Rounded corners for the button */
-    font-size: 16px; /* Font size for the button */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s; /* Smooth background color transition */
-    width: 100%; /* Full width button */
+    background-color: #2c3e50; 
+    color: #fff; 
+    padding: 10px 15px; 
+    border: none; 
+    border-radius: 4px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+    width: 100%; 
 }
 
 
