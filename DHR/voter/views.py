@@ -225,3 +225,7 @@ def check_voter(request, user_id):
         return JsonResponse({'message': 'Voter status updated successfully'}, status=200)
 
     return JsonResponse({'message': 'Invalid request method'}, status=405)
+
+
+def dashboard_view(request):
+    return render(request, 'voter/dashboard.html')

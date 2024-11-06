@@ -10,5 +10,6 @@ urlpatterns = [
     path('add_mohalla/', views.add_mohalla_name, name='add_mohalla'),
     path('update_block_numbers/', views.update_block_numbers, name='update_block_numbers'),
     path('check_voter/<int:user_id>/', views.check_voter, name='check_voter'),
-    path('check_voter/', views.check_voter_page, name='check_voter')
+    path('check_voter/', views.check_voter_page, name='check_voter'),
+    path('dashboard/', views.dashboard_view, name='dashboard'),
 ]
