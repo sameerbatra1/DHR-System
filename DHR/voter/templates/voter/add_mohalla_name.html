@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Voter</title>
-    <link rel="stylesheet" href="{% static 'css/voter.css' %}">
+    <title>Add Mohalla</title>
+    <link rel="stylesheet" href="{% static 'css/add_mohalla.css' %}">
     <script>
         {% comment %} // Function to show the alert when a voter is added successfully
         function showSuccessAlert() {
@@ -24,7 +24,6 @@
 <body>
     <h2>Add Mohalla</h2>
     <div class="form-container">
-        <h2>Add Mohalla</h2>
         <form method="POST" action="{% url 'add_mohalla' %}">
             <!-- Government Number -->
             <div class="form-group">
