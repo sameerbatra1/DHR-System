@@ -18,6 +18,13 @@ class SuperuserForm(forms.Form):
         required=False,
         help_text="Set the access time in the format YYYY-MM-DD HH:MM"
     )
+     # CNIC with numeric validation
+    cnic = forms.CharField(
+        max_length=13,
+        min_length=13,
+        required=True,
+        widget=forms.TextInput(attrs={'pattern': r'\d+', 'title': 'Numeric CNIC only'})
+    )
 
     def clean_password(self):
         password = self.cleaned_data['password']

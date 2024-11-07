@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users</title>
+    <link rel="stylesheet" href="{% static 'authentication/css/view_all_users.css' %}"> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Load jQuery -->
+    {% comment %} <script src="{% static 'js/delete_voter.js' %}"></script> <!-- Load your external JS file -->
+    <script src="{% static 'js/view_voter.js' %}"></script> {% endcomment %}
+</head>
+<body>
+    <div class="main_container">
+        <div class="header"></div>
+        <div class="user_data">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Username</th>
+                        <th>CNIC</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>UserType</th>
+                        <th>Access Time</th>
+                        <th>Last Login</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.cnic }}</td>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.user_type }}</td>
+                        <td>{{ user.access_time }}</td>
+                        <td>{{ user.last_login }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="11">No voters found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -180,6 +180,7 @@ def create_superuser_view(request):
             last_name = form.cleaned_data['last_name']
             password = form.cleaned_data['password']  # Extract password from the form
             access_time = form.cleaned_data['access_time']
+            cnic = form.cleaned_data['cnic']
             # Hash the password using bcrypt
             hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
             
@@ -192,6 +193,7 @@ def create_superuser_view(request):
                 'username': username,
                 'first_name': first_name,
                 'last_name': last_name,
+                'cnic': cnic,
                 'password': hashed,
                 'is_superuser': True,
                 'is_staff': True,
@@ -218,4 +220,14 @@ def create_superuser_view(request):
 
 def home(request):
     return render(request, 'authentication/home.html')
+
+def view_all_users(request):
+    users = list(users_collection.find().sort('first_name', 1))
+
+    for user in users:
+        user['_id'] = str(user['_id'])  # Convert ObjectId to string
+
+    return render(request, 'authentication/view_all_users.html', {'users': users})
+
+
 
