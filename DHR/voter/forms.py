@@ -40,7 +40,7 @@ class VoterForm(forms.Form):
     
     block_number = forms.CharField(max_length=10, required=False)
 
-    checked = forms.BooleanField(required=False, initial=False)
+    # checked = forms.BooleanField(required=False, initial=False)
 
     # Mohalla name as a dropdown list
     mohalla_name = forms.ChoiceField(choices=[], required=True)

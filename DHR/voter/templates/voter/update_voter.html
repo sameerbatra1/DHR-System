@@ -14,8 +14,8 @@
     </div>
     <div class="form-container">
         <form method="POST">
-            {% comment %} {{ form.as_p }} {% endcomment %}
-            <!-- Government Number -->
+            {{ form.as_p }}
+            {% comment %} <!-- Government Number -->
             <div class="form-group">
                 <label for="government_number">Government Number:</label>
                 <input type="text" id="government_number" name="government_number" maxlength="150" required>
@@ -76,7 +76,7 @@
             <div class="form-group">
                 <label for="mohalla_name">Mohalla Name:</label>
                 {{ form.mohalla_name }}
-            </div>
+            </div> {% endcomment %}
     
             {% comment %} <!-- Block Number -->
             <div class="form-group">

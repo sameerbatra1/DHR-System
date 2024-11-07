@@ -22,6 +22,8 @@ from datetime import timedelta
 from django.http import JsonResponse
 from django.utils import timezone
 import pytz
+from django.contrib.auth.decorators import login_required
+from bson import ObjectId
 
 users_collection = db['users']
 
@@ -105,11 +107,67 @@ def get_next_sequence_value(sequence_name):
         return 1
     return sequence_document['sequence_value']
 
+def get_user_from_jwt(request):
+    # print("In get_user_from_jwt token")
+    token = request.headers.get('Authorization')  # Get token from Authorization header
+    print(f"Token: {token}")
+    if token:
+        try:
+            # Remove the 'Bearer ' prefix
+            token = token.split()[1]
+            print(f"Token from line 118: {token}")
+            # print(f"Getting secret key: {settings.SECRET_KEY}")
+            decoded_data = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
+            # print(f"decoded data {decoded_data}")
+            user_id = decoded_data.get('user_id')  # Assuming 'user_id' is stored in the JWT
+            # print(f"User_id: {user_id}")
+            # Use PyMongo to query the MongoDB collection by user_id
+            user = users_collection.find_one({'_id': ObjectId(user_id)})
+            if user:
+                # print(f"user from line 127: {user}")
+                return user
+            else:
+                return None  # User not found in MongoDB
+
+        except jwt.ExpiredSignatureError:
+            return None  # Token expired
+        except jwt.InvalidTokenError:
+            return None  # Invalid token
+    return None  # No token found
+
+@csrf_exempt
+def check_superuser(request):
+    user = get_user_from_jwt(request)
+    if user:
+        return render(request, 'authentication/create_superuser.html')
+    else:
+        return JsonResponse({'error': 'You are not authorized to access this page.'}, status=401)
+
 # @api_view(['POST'])
+# @login_required
+@csrf_exempt
 def create_superuser_view(request):
+    print("Calling create_superuser_view function")
+    if request.method == 'GET':
+        form = SuperuserForm(request.POST)
+        return render(request, 'authentication/create_superuser.html', {'form': form})
     if request.method == 'POST':
         form = SuperuserForm(request.POST)
+        # Authenticate the user based on JWT
+        user = get_user_from_jwt(request)
+        print(f"Getting User: {user}")
+        if not user:
+            return JsonResponse({'message': 'Authentication failed: Invalid token'}, status=401)
+    
+        #  print(f"User Details: {user}")
+        print(f"Is Superuser: {user.get('is_superuser')}")  # Access the field directly from the dictionary
+    
+        if not user.get('is_superuser'):
+            return JsonResponse({'message': 'Access denied: Only superusers can create users'}, status=403)
+        print("checking if Form is valid")
+
         if form.is_valid():
+            print("Form is valid")
             username = form.cleaned_data['username']
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
@@ -118,12 +176,12 @@ def create_superuser_view(request):
             # Hash the password
             hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
             
+            # Generate a unique user_id and store the time
             user_id = get_next_sequence_value('user_id')
-
             current_time = timezone.now()
 
             superuser_data = {
-                'id': user_id,  
+                'id': user_id,
                 'username': username,
                 'first_name': first_name,
                 'last_name': last_name,
@@ -131,18 +189,19 @@ def create_superuser_view(request):
                 'is_superuser': True,
                 'is_staff': True,
                 'is_active': True,
-                'user_type': 'superuser',
-                'access_time': None,  
+                'user_type': 'voter_manager',
+                'access_time': None,
                 'last_login': current_time
             }
 
+            # Insert the new user into MongoDB
             users_collection.insert_one(superuser_data)
             return redirect('home')  # Redirect to a success page
 
     else:
         form = SuperuserForm()
-
-    return render(request, 'authentication\create_superuser.html', {'form': form})
+    return render(request, 'authentication/create_superuser.html', {'form': form})
 
 def home(request):
     return render(request, 'authentication/home.html')
+

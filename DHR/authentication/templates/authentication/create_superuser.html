@@ -1,15 +1,67 @@
 <!-- templates/create_superuser.html -->
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Superuser</title>
+    <title>Create user</title>
+    {% comment %} <script src="{% static 'js/create_user.js' %}"></script> {% endcomment %}
 </head>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('superuser-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent default form submission
+
+            const token = localStorage.getItem('access');  // Retrieve token from local storage
+
+            if (!token) {
+                alert('No access token found. Please log in.');
+                return;
+            }
+
+            // Collect form data
+            const formData = new FormData(form);
+
+            // Prepare headers
+            const headers = new Headers();
+            headers.append('Authorization', `Bearer ${token}`);
+            headers.append('Content-Type', 'application/json');
+
+            // Convert FormData to JSON
+            const formDataObj = {};
+            formData.forEach((value, key) => {
+                formDataObj[key] = value;
+            });
+
+            const requestBody = JSON.stringify(formDataObj);
+
+            // Send POST request with fetch
+            fetch('http://127.0.0.1:8000/create_superuser/', {
+                method: 'POST',
+                headers: headers,
+                body: requestBody
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Superuser created successfully');
+                    window.location.href = '/success-page';  // Redirect to a success page
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+    });
+</script>
 <body>
     <h2>Create Superuser</h2>
-    <form method="POST">
+    <form method="POST" id="superuser-form">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Create Superuser</button>

@@ -106,7 +106,7 @@ def add_voter(request):
                 "family_code": family_code,
                 "block_number": voter_data['block_number'],
                 "mohalla_name": voter_data['mohalla_name'],
-                "checked": voter_data['checked']
+                "checked": False
             }
 
             # Insert the new voter into the database
@@ -169,7 +169,9 @@ def update_voter(request, user_id):
                 "address": form.cleaned_data['address'],
                 "mobile_number": form.cleaned_data['mobile_number'],
                 "family_code": form.cleaned_data.get('family_code') or user_id,  # Use user_id if family_code is empty
-                "block_number": form.cleaned_data['block_number']
+                "block_number": form.cleaned_data['block_number'],
+                "mohalla_name": form.cleaned_data['mohalla_name'],
+                # "checked": voter_data['checked']
             }
 
             # Update the voter in the database

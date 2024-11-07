@@ -7,6 +7,8 @@ document.querySelector('#login-form').addEventListener('submit', function(event)
     console.log("JavaScript working");
     console.log("Username: ", username);
     console.log("Password: ", password);
+    // console.log('Access Token', data.access)
+
     // Disable the button to avoid multiple requests
     // document.querySelector('.login-btn').disabled = true;
     
@@ -27,11 +29,15 @@ document.querySelector('#login-form').addEventListener('submit', function(event)
         return response.json();
     })
     .then(data => {
-        if (data.access) {  // Check if the token is present in the response
+        if (data.access) {
             localStorage.setItem('access', data.access);
             localStorage.setItem('refresh', data.refresh);
-            alert('Login successful!');
-            window.location.href = '/home/';  // Redirect to home or any other page
+            if (data.user_type == 'superuser'){
+                window.location.href = '/dashboard/';
+            }
+            else{
+                window.location.href = '/view_all_voters/'
+            }  
         } else {
             alert('Login failed: ' + (data.message || 'Unknown error'));
         }

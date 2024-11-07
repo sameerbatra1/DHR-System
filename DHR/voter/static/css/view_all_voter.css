@@ -1,7 +1,12 @@
+*{
+    box-sizing: border-box;
+    /* overflow: hidden; */
+}
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    /* background-color: black; */
+    width: 100vw;
+    height: 100vh;
 }
 
 h2 {
@@ -48,7 +53,7 @@ tr:nth-child(even) {
     display: flex;
     gap: 50pc;
     align-items: center;
-    height: 70px;
+    height: 10%;
     background-color: #2c3e50;
     
 }
@@ -59,9 +64,9 @@ tr:nth-child(even) {
 
 .create_button{
     margin-top: 10px;
-    width: 60px;
+    width: 10%;
     height: 30px;
-    border-radius: 20px;
+    border-radius: 5px;
     color: rgb(37, 37, 37);
     background-color: white;
     border-color: rgb(70, 69, 69);;
