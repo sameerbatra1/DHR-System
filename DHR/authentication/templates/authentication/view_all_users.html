@@ -7,8 +7,8 @@
     <title>All Users</title>
     <link rel="stylesheet" href="{% static 'authentication/css/view_all_users.css' %}"> 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Load jQuery -->
-    {% comment %} <script src="{% static 'js/delete_voter.js' %}"></script> <!-- Load your external JS file -->
-    <script src="{% static 'js/view_voter.js' %}"></script> {% endcomment %}
+    <script src="{% static 'authentication/js/delete_user.js' %}"></script> <!-- Load your external JS file -->
+    <script src="{% static 'js/view_voter.js' %}"></script>
 </head>
 <body>
     <div class="main_container">
@@ -25,6 +25,7 @@
                         <th>UserType</th>
                         <th>Access Time</th>
                         <th>Last Login</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,6 +39,10 @@
                         <td>{{ user.user_type }}</td>
                         <td>{{ user.access_time }}</td>
                         <td>{{ user.last_login }}</td>
+                        <td>
+                            <!-- add update user URL here -->
+                            <button class="delete-btn" data-user-id="{{ user.id }}">Delete</button>
+                        </td>
                     </tr>
                     {% empty %}
                     <tr>

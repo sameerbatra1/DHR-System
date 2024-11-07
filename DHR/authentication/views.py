@@ -228,6 +228,17 @@ def view_all_users(request):
         user['_id'] = str(user['_id'])  # Convert ObjectId to string
 
     return render(request, 'authentication/view_all_users.html', {'users': users})
-
-
+@csrf_exempt
+def delete_user(request, id):
+    if request.method == 'POST':
+        try:
+            result = users_collection.delete_one({'id':id})
+            if result.deleted_count > 0:
+                return JsonResponse({'success': True, 'message': 'Voter deleted successfully'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Voter not found'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f'An error occurred: {str(e)}'})
+    else:
+        return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
