@@ -144,36 +144,43 @@ def check_superuser(request):
         return JsonResponse({'error': 'You are not authorized to access this page.'}, status=401)
 
 # @api_view(['POST'])
-# @login_required
+# @login_required@csrf_exempt
 @csrf_exempt
 def create_superuser_view(request):
     print("Calling create_superuser_view function")
+
+    # Handling GET request
     if request.method == 'GET':
-        form = SuperuserForm(request.POST)
+        form = SuperuserForm()
         return render(request, 'authentication/create_superuser.html', {'form': form})
-    if request.method == 'POST':
+
+    # Handling POST request
+    elif request.method == 'POST':
+        # Retrieve form data
         form = SuperuserForm(request.POST)
+        
+        print(f"Form data received: {request.POST}")
+        
         # Authenticate the user based on JWT
         user = get_user_from_jwt(request)
         print(f"Getting User: {user}")
+        
         if not user:
             return JsonResponse({'message': 'Authentication failed: Invalid token'}, status=401)
-    
-        #  print(f"User Details: {user}")
-        print(f"Is Superuser: {user.get('is_superuser')}")  # Access the field directly from the dictionary
-    
+
+        print(f"Is Superuser: {user.get('is_superuser')}")  # Check if the user is a superuser
         if not user.get('is_superuser'):
             return JsonResponse({'message': 'Access denied: Only superusers can create users'}, status=403)
-        print("checking if Form is valid")
-
+        # print(f"Form cleaned data: {form.cleaned_data}")
+        # Check if form is valid
         if form.is_valid():
             print("Form is valid")
             username = form.cleaned_data['username']
             first_name = form.cleaned_data['first_name']
             last_name = form.cleaned_data['last_name']
             password = form.cleaned_data['password']  # Extract password from the form
-
-            # Hash the password
+            access_time = form.cleaned_data['access_time']
+            # Hash the password using bcrypt
             hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
             
             # Generate a unique user_id and store the time
@@ -190,17 +197,24 @@ def create_superuser_view(request):
                 'is_staff': True,
                 'is_active': True,
                 'user_type': 'voter_manager',
-                'access_time': None,
+                'access_time': access_time,
                 'last_login': current_time
             }
-
+            
             # Insert the new user into MongoDB
             users_collection.insert_one(superuser_data)
-            return redirect('home')  # Redirect to a success page
+            print(f"Superuser created with ID: {user_id}")
+
+            return JsonResponse({'success': True, 'message': 'Superuser created successfully'})
+
+        else:
+            print("Form is invalid")
+            return JsonResponse({'success': False, 'message': 'Form validation failed'}, status=400)
 
     else:
-        form = SuperuserForm()
-    return render(request, 'authentication/create_superuser.html', {'form': form})
+        # This should return if request method is not GET or POST
+        print(f"Invalid request method: {request.method}")
+        return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
 
 def home(request):
     return render(request, 'authentication/home.html')
