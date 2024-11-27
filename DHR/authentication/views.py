@@ -28,6 +28,7 @@ from functools import wraps
 from django.utils.timezone import make_aware, now
 
 users_collection = db['users']
+election_mode_status_collection = db['election_mode']
 
 @csrf_exempt
 def custom_login_view(request):
@@ -87,6 +88,9 @@ def custom_login_view(request):
                         
                 if user.get('is_active'):
                     print("line 89")
+                    election_mode_status_doc = election_mode_status_collection.find_one({'name': 'election_mode_status'})
+                    election_mode_status = election_mode_status_doc.get('election_mode', False) if election_mode_status_doc else False
+
                     # Get current time in PKT
                     pkt_tz = pytz.timezone('Asia/Karachi')
                     last_login_time = timezone.now() + timedelta(hours=5)
@@ -110,6 +114,7 @@ def custom_login_view(request):
                         'first_name': user['first_name'],
                         'last_name': user['last_name'],
                         'user_type': user['user_type'],
+                        'election_mode': election_mode_status,
                         'message': 'Login successful'
                     }, status=200)
                 else:

@@ -36,7 +36,13 @@ document.querySelector('#login-form').addEventListener('submit', function(event)
                 window.location.href = '/dashboard/';
             }
             else{
-                window.location.href = '/view_all_voters/'
+                if (data.election_mode == true){
+                    window.location.href = '/check_voter/'
+                }
+                else{
+                    window.location.href = '/view_all_voters/'
+                    console.log(data)
+                }
             }  
         } else {
             alert('Login failed: ' + (data.message || 'Unknown error'));
