@@ -196,13 +196,13 @@ def check_superuser_status(request):
 # @login_required@csrf_exempt
 @csrf_exempt
 # @check_superuser
-def create_superuser_view(request):
+def create_user_view(request):
     print("Calling create_superuser_view function")
 
     # Handling GET request
     if request.method == 'GET':
         form = SuperuserForm()
-        return render(request, 'authentication/create_superuser.html', {'form': form})
+        return render(request, 'authentication/create_user.html', {'form': form})
 
     # Handling POST request
     elif request.method == 'POST':

@@ -12,7 +12,7 @@
             console.log('Token: ', token);
             if (token) {
                 // Set headers with token and submit the data via fetch
-                fetch('http://127.0.0.1:8000/create_superuser/', {
+                fetch('http://127.0.0.1:8000/create_user/', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -38,7 +38,7 @@
     </script>
 </head>
 <body>
-    <h2>Create Superuser</h2>
+    <h2>Create User</h2>
     <form method="POST">
         {% csrf_token %}
         {% comment %} {{ form.as_p }} {% endcomment %}
@@ -72,6 +72,7 @@
             <input type="datetime-local" id="access_time" name="access_time">
         </div>
         <button type="button" onclick="createsuperuser(event)">Create Superuser</button>
+        
     </form>
 </body>
 </html>

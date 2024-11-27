@@ -36,6 +36,35 @@ function redirectToViewAllUsersPage() {
     });
 }
 
+function redirectToAddUsersPage(){
+    const token = localStorage.getItem('access');
+    console.log('Token: ', token)
+    if (!token) {
+        alert('No access Token found. Please log in.');
+        return;
+    }
+    fetch('http://127.0.0.1:8000/check_superuser/', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,  // Pass the JWT token in the header
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        console.log('Response status:', response.status);  // Log the response status
+        if (!response.ok) {
+            throw new Error('Access denied or request failed');
+        }
+        return response.json();
+    })
+    .then(data => {
+        window.location.href = 'http://127.0.0.1:8000/create_user/';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    });
+}
 </script>
 <body>
     <div class="main_container">
