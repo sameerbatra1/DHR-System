@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate Election Mode</title>
+    <script>
+        async function toggleElectionMode() {
+            const response = await fetch('/activate_election_mode/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // Django CSRF protection
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('status').innerText = `Election Mode is now: ${data.election_mode ? 'Active' : 'Inactive'}`;
+            } else {
+                alert(data.error || "An error occurred.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Toggle Election Mode</h1>
+    <p id="status">Click the button below to toggle election mode.</p>
+    <button onclick="toggleElectionMode()">Toggle Election Mode</button>
+</body>
+</html>

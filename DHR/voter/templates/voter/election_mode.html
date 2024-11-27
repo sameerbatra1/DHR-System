@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Election Mode</title>
+</head>
+<script>
+    function redirectToAddMohallaName(){
+        window.location.href = "http://127.0.0.1:8000/add_mohalla/";
+}
+    function redirectToUpdateBlockNumbers(){
+        window.location.href = "http://127.0.0.1:8000/update_block_numbers/"
+    }
+    function redirectToggleElectionMode(){
+        window.location.href = "http://127.0.0.1:8000/activate_election_mode/"
+    }
+</script>
+<body>
+    <div class="main_container">
+        <div class="add_mohalla_name" onclick=redirectToAddMohallaName()>
+            <h3>Add Mohalla Name</h3>
+        </div>
+        <div class="add_block_numbers" onclick="redirectToUpdateBlockNumbers()">
+            <h3>Add Block Numbers</h3>
+        </div>
+        <div class="activate_election_mode" onclick="redirectToggleElectionMode()">
+            <h3>Activate Election Mode</h3>
+        </div>
+    </div>
+</body>
+</html>

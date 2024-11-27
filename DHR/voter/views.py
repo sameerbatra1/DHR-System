@@ -9,6 +9,7 @@ from mongo_config import db
 # Create your views here.
 voter_collection = db['voters']
 mohalla_name_collection = db['MohallaName']
+election_mode_status = db['election_mode']
 
 @csrf_exempt
 def add_mohalla_name(request):
@@ -231,3 +232,45 @@ def check_voter(request, user_id):
 
 def dashboard_view(request):
     return render(request, 'voter/dashboard.html')
+
+def election_mode_view(request):
+    return render(request, 'voter/election_mode.html')
+
+def activate_election_mode(request):
+    """
+     Toggle the 'election_mode' field in the database.
+    """
+    try:
+        if request.method == 'GET':
+            return render(request, 'voter/election_mode_status.html')
+        
+        if request.method == 'POST':
+            # Fetch the current status of election_mode
+            mode = election_mode_status.find_one({"name": "election_mode_status"})
+            if not mode:
+                # Initialize the field if it does not exist
+                election_mode_status.insert_one({"name": "election_mode_status", "election_mode": False})
+                current_status = False
+            else:
+                current_status = mode['election_mode']
+
+            # Toggle the boolean field
+            new_status = not current_status
+
+            # Update the field in the database
+            election_mode_status.update_one(
+                {"name": "election_mode_status"},
+                {"$set": {"election_mode": new_status}}
+            )
+
+            return JsonResponse({
+                "success": True,
+                "message": "Election mode updated successfully.",
+                "election_mode": new_status
+            })
+
+        else:
+            return JsonResponse({"error": "Invalid request method. Use POST."}, status=405)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

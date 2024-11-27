@@ -12,4 +12,7 @@ urlpatterns = [
     path('check_voter/<int:user_id>/', views.check_voter, name='check_voter'),
     path('check_voter/', views.check_voter_page, name='check_voter'),
     path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('election_mode/', views.election_mode_view, name='election_mode'),   
+    path('activate_election_mode/', views.activate_election_mode, name='activate_election_mode'),
+ 
 ]
