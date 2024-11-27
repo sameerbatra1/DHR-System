@@ -10,34 +10,35 @@
 <script>
     function redirectToSuperuserPage() {
         const token = localStorage.getItem('access');  // Retrieve token from local storage
-        console.log('Token: ', token)
-        if (token) {
-            // Set headers with token if needed and navigate
-            fetch('http://127.0.0.1:8000/create_superuser/', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,  // Pass the JWT token in the header
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    // If token is valid, redirect to the page
-                    window.location.href = 'http://127.0.0.1:8000/create_superuser/';
-                    
-                } else {
-                    alert('You do not have permission to access this page.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            });
-        } else {
+        if (!token) {
             alert('No access token found. Please log in.');
+            return;
         }
+
+        // Check if the user is a superuser
+        fetch('http://127.0.0.1:8000/check_superuser/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,  // Pass the JWT token in the header
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.is_superuser) {
+                // User is a superuser, redirect to the superuser page
+                window.location.href = 'http://127.0.0.1:8000/create_superuser/';
+            } else {
+                alert('You do not have permission to access this page.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
     }
-    </script>
+</script>
+
 <body>
     
 
@@ -45,7 +46,7 @@
         <div class="header">
         </div>
         <div class="top_box">
-            <div class="box_1" onclick="window.location.href='http://127.0.0.1:8000/create_superuser/'">
+            <div class="box_1" onclick="window.location.href='/users/'">
                 <h3>Users</h3>
             </div>
             <div class="box_2" onclick="window.location.href='http://127.0.0.1:8000/view_all_voters/'">
