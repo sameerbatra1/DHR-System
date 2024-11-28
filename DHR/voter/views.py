@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Voter
 import json
 from mongo_config import db
+from bson.son import SON
 
 # Create your views here.
 voter_collection = db['voters']
@@ -274,3 +275,68 @@ def activate_election_mode(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+    
+def voter_analytics(request):
+    try:
+        total_voters = voter_collection.count_documents({})
+        checked_true_count = voter_collection.count_documents({'checked':True})
+        checked_false_count = voter_collection.count_documents({'checked':False})
+
+        return JsonResponse({
+            'total_voters': total_voters,
+            'checked_true_count':checked_true_count,
+            'checked_false_count':checked_false_count,
+        }, status=200)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+def voter_analytics_page(request):
+    return render(request, 'voter/voter_analytics.html')
+
+def mohalla_voter_stats(request):
+    # MongoDB aggregation pipeline to count voters by mohalla who have voted (checked=True)
+    pipeline = [
+        {"$match": {"checked": True}},  # Only include voters who have voted (checked=True)
+        {"$group": {
+            "_id": "$mohalla_name",  # Group by mohalla_name
+            "total_voters": {"$sum": 1}  # Count the number of voters in each mohalla
+        }},
+        {"$sort": SON([("_id", 1)])}  # Sort the results by mohalla_name
+    ]
+    
+    result = list(voter_collection.aggregate(pipeline))  # Run aggregation query
+    
+    # Prepare the response data
+    data = {
+        "mohalla_stats": [
+            {
+                "mohalla_name": item["_id"],
+                "total_voters": item["total_voters"],
+            }
+            for item in result
+        ]
+    }
+
+    return JsonResponse(data)
+
+def voter_by_gender(request):
+    pipeline = [
+        {"$match": {"checked":True}},
+        {"$group": {
+            "_id": "$gender",
+            "total_voters": {"$sum": 1}
+        }},
+        {"$sort": SON([("_id", 1)])}
+    ]
+    result = list(voter_collection.aggregate(pipeline))
+
+    data = {
+        "gender_stats": [
+            {
+                "gender": item["_id"],
+                "total_voters": item["total_voters"],
+            }
+            for item in result
+        ]
+    }
+    return JsonResponse(data)

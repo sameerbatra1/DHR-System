@@ -1,0 +1,183 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter Analytics</title>
+    <link rel="stylesheet" href="{% static 'css\voter_analytics.css' %}">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        // Load the Google Charts library
+        google.charts.load('current', {'packages':['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded
+        google.charts.setOnLoadCallback(drawChart);
+
+        // Callback function to draw the pie chart
+        function drawChart() {
+            // Fetch data from your backend using the API
+            fetch('/voter_analytics/')
+                .then(response => response.json())  // Parse the JSON response
+                .then(data => {
+                    // Extract values from the response
+                    var checkedVoters = data.checked_true_count;  // Assuming the response has 'checked_voters' and 'unchecked_voters'
+                    var uncheckedVoters = data.checked_false_count;
+                    var totalVoters = data.total_voters;  // Get total voters from the response
+
+                    // Display total voters below the chart title
+                    document.getElementById('total_voters').textContent = 'Total Voters: ' + totalVoters;
+
+                    // Create the data table for the pie chart
+                    var chartData = new google.visualization.DataTable();
+                    chartData.addColumn('string', 'Voter Status');
+                    chartData.addColumn('number', 'Count');
+                    chartData.addRows([
+                        ['Voted', checkedVoters],
+                        ['Not Voted', uncheckedVoters]
+                    ]);
+
+                    // Set chart options
+                    var options = {
+                        'title': 'Voter Status Distribution',
+                        'width': "100%",
+                        'height': "100%",
+                        'is3D': true,  // 3D effect
+                        'slices': {
+                            0: { offset: 0.1 },  // Add slight offset for "Checked"
+                            1: { offset: 0.1 }   // Add slight offset for "Unchecked"
+                        },
+                        'pieSliceText': 'percentage',  // Display percentage inside the slices
+                    };
+
+                    // Instantiate and draw the pie chart in the element with id 'piechart_div'
+                    var chart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+                    chart.draw(chartData, options);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+    </script>
+    <script type="text/javascript">
+        // Load Google Charts
+        google.charts.load('current', {'packages':['corechart', 'bar']});
+
+        // Set the callback to draw the chart
+        google.charts.setOnLoadCallback(drawChart);
+
+        // Function to draw the chart
+        function drawChart() {
+            // Fetch data from the backend API
+            fetch('/voter_by_mohalla/')
+                .then(response => response.json())  // Parse the JSON response
+                .then(data => {
+                    // Create a DataTable for the bar chart
+                    var chartData = new google.visualization.DataTable();
+                    chartData.addColumn('string', 'Mohalla');
+                    chartData.addColumn('number', 'Voters');
+
+                    // Loop through the data and add it to the DataTable
+                    data.mohalla_stats.forEach(function(stat) {
+                        chartData.addRow([stat.mohalla_name, stat.total_voters]);
+                    });
+
+                    // Set chart options for a vertical column chart
+                    var options = {
+                        title: 'Number of Voters Who Voted in Each Mohalla',
+                        chartArea: {width: '60%'},
+                        hAxis: {
+                            title: 'Mohallas'
+                        },
+                        vAxis: {
+                            title: 'Number of Voters'
+                        }
+                    };
+
+                    // Create and draw the chart as a ColumnChart (vertical bars)
+                    var chart = new google.visualization.ColumnChart(document.getElementById('bar_chart_div'));
+                    chart.draw(chartData, options);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+    </script>
+    <script type="text/javascript">
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', {'packages':['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+
+        // Fetch the gender-wise voter data from the Django API
+        function drawChart() {
+            fetch('/voter_by_gender/')  // Make an API call to your Django view
+                .then(response => response.json())  // Parse the JSON response
+                .then(data => {
+                    var chartData = new google.visualization.DataTable();
+                    chartData.addColumn('string', 'Gender');
+                    chartData.addColumn('number', 'Total Voters');
+
+                    // Loop through the data and add rows to the chart data
+                    data.gender_stats.forEach(function(item) {
+                        chartData.addRow([item.gender, item.total_voters]);
+                    });
+
+                    var options = {
+                        // 'title': 'Gender-wise Voter Distribution',
+                        'width': "100%",
+                        'height': "100%",
+                        'is3D': true,
+                        pieSliceText: 'percentage',
+                        slices: {
+                            0: { offset: 0.1 },  // Offset first slice
+                            1: { offset: 0.1 }   // Offset second slice (if applicable)
+                        },
+                        pieStartAngle: 100,  // Adjust the starting angle of the pie chart
+                        // chartArea: { width: '80%', height: '80%' },  // Adjust chart area
+                    };
+
+                    // Create and draw the chart
+                    var chart = new google.visualization.PieChart(document.getElementById('gender_pie_chart_id'));
+                    chart.draw(chartData, options);
+                })
+                .catch(error => {
+                    console.error('Error fetching gender-wise data:', error);
+                });
+        }
+    </script>
+</head>
+<body>
+    {% comment %} <div style="text-align: center; padding: 50px;">
+        <h1>Voter Analytics</h1>
+        <!-- Display the total number of voters below the title -->
+        <p id="total_voters" style="font-size: 18px; font-weight: bold;"></p> <!-- Placeholder for total voters --> 
+
+    </div>{% endcomment %}
+    <div class="header">
+        <a href="http://127.0.0.1:8000/dashboard/" id="dashboard_link">Back To Dashboard</a>
+        <h2 class="heading">Voter Analytics</h2>
+    </div>
+    <div class="main_container">
+        <p id="total_voters"></p>
+        <div class="upper_box">
+            <div class="total_voters_pie_chart">
+                <!-- <p id="total_voters"></p> -->
+                <div id="piechart_div" style="width: 600px; height: 400px;"></div>
+            </div>
+            <div class="voter_by_gender">
+                <!-- <h1>Voter Analytics: Gender-wise Voters Who Voted</h1> -->
+                <div id="gender_pie_chart_id"></div>
+            </div>
+        </div>
+        <div class="lower_box">
+            <div class="voter_by_mohalla_name">
+                <div id="bar_chart_div"></div>
+            </div>
+            <!-- <div class="voter_by_block_number"></div> -->
+        </div>
+    </div>
+</body>
+</html>

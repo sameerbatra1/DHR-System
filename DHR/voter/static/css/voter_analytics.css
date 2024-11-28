@@ -1,0 +1,130 @@
+/* Universal Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;                 /* Enable flexbox for the header */
+    justify-content: space-between; /* Space between elements (left for link, center for heading) */
+    align-items: center;           /* Vertically center the content */
+    padding: 10px 20px;            /* Add some padding around the header */
+}
+
+.heading {
+    flex-grow: 1;                  /* Make the heading take up remaining space */
+    text-align: center;            /* Center-align the heading */
+    color: white;
+}
+
+#dashboard_link {
+    text-decoration: none;         /* Remove underline from the link */
+    color: #007bff;                /* Optional: change the link color */
+    font-size: 16px;               /* Optional: change font size */
+}
+
+body {
+    /* display: flex; */
+    /* justify-content: center; */
+    align-items: center;
+    height: 100vh;
+    background-color: #2c3e50; /* Dark blue-gray background */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Main Container */
+.main_container {
+    width: 100%;
+    /* max-width: 1200px; */
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ecf0f1; /* Light gray background for the container */
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Subtle shadow for a floating effect */
+    padding: 20px;
+}
+
+/* Upper Box */
+.upper_box {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.total_voters_pie_chart,
+.voter_by_gender {
+    width: 48%;
+    background-color: #ffffff; /* White background for each chart */
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    /* padding: 20px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Lower Box */
+.lower_box {
+    width: 100%;
+    height: 50%;
+    display: flex;
+}
+
+.voter_by_mohalla_name {
+    width: 100%;
+    background-color: #ffffff; /* White background for the bar chart */
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Total Voters Text */
+#total_voters {
+    font-size: 1.2rem;
+    color: #34495e; /* Dark text for clarity */
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+/* Styling for Charts */
+#piechart_div,
+#gender_pie_chart_id,
+#bar_chart_div {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* Responsive Design
+@media screen and (max-width: 768px) {
+    .main_container {
+        width: 95%;
+        height: auto;
+    }
+    .upper_box {
+        flex-direction: column;
+        height: auto;
+    }
+    .total_voters_pie_chart,
+    .voter_by_gender {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .lower_box {
+        flex-direction: column;
+    }
+    .voter_by_mohalla_name {
+        width: 100%;
+    }
+} */
