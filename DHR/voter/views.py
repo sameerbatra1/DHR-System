@@ -340,3 +340,24 @@ def voter_by_gender(request):
         ]
     }
     return JsonResponse(data)
+
+def reset_voter_status(request):
+    try:
+        # Reset the 'checked' field to False for all voters
+        result = voter_collection.update_many(
+            {},  # Empty filter to match all documents
+            {'$set': {'checked': False}}  # Set 'checked' to False for all voters
+        )
+
+        # Return success message with count of updated documents
+        return JsonResponse({
+            'status': 'success',
+            'message': f'{result.modified_count} voters have been reset successfully.',
+        })
+
+    except Exception as e:
+        # Return error message in case of failure
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        })

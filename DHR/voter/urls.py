@@ -18,5 +18,6 @@ urlpatterns = [
     path('voter_analytics_page/', views.voter_analytics_page, name='voter_analytics_page'),    
     path('voter_by_mohalla/', views.mohalla_voter_stats, name='voter_by_mohalla'),
     path('voter_by_gender/', views.voter_by_gender, name='voter_by_gender'),
+    path('reset_voter_status/', views.reset_voter_status, name='reset_voter_status'),
  
 ]

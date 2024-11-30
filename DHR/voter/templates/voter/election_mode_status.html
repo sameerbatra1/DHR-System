@@ -20,11 +20,42 @@
                 alert(data.error || "An error occurred.");
             }
         }
+        async function resetVoterStatus() {
+            try {
+                // Send the POST request to reset the voter status
+                const response = await fetch('/reset_voter_status/', {
+                    {% comment %} method: 'POST',  // Use POST method as per your Django view
+                    headers: {
+                        'Content-Type': 'application/json',  // Optional if you're sending JSON
+                    }, {% endcomment %}
+                });
+        
+                // Parse the JSON response
+                const data = await response.json();
+        
+                // Check if the request was successful
+                if (data.status === 'success') {
+                    // Optionally, you can display a success message or update the UI
+                    alert(data.message);  // Show the success message returned by Django
+                    // You can also update some UI element or reload the page, e.g.:
+                    // location.reload();  // Reload the page to reflect changes
+                } else {
+                    // If the response contains an error message
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                // If there is an error with the fetch request
+                console.error('Error:', error);
+                alert('An error occurred while resetting the voter status.');
+            }
+        }
     </script>
 </head>
 <body>
     <h1>Toggle Election Mode</h1>
     <p id="status">Click the button below to toggle election mode.</p>
     <button onclick="toggleElectionMode()">Toggle Election Mode</button>
+    <button onclick="resetVoterStatus()">Reset Voter Status</button>
+
 </body>
 </html>
