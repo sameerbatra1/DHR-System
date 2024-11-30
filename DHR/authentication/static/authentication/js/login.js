@@ -24,7 +24,11 @@ document.querySelector('#login-form').addEventListener('submit', function(event)
     })
     .then(response => {
         if (!response.ok) {  // Check if the response has a non-2xx status code
-            throw new Error(`Login failed with status ${response.status}`);
+            return response.json().then(data => {
+                // Show the error message from the server response
+                alert(data.error || 'Login failed');  // If error is present in response, show it
+                // throw new Error(`Login failed with status ${response.status}`);
+            });
         }
         return response.json();
     })

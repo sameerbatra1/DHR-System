@@ -8,6 +8,36 @@
     <title>Add Mohalla</title>
     <link rel="stylesheet" href="{% static 'css/add_mohalla.css' %}">
     <script>
+            // Function to handle the form submission, show success alert and redirect
+            function handleFormSubmit(event) {
+                event.preventDefault();
+            
+                const form = event.target;  // The form being submitted
+                const formData = new FormData(form);
+            
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success alert
+                        alert('Mohalla name added successfully!');
+            
+                        // Redirect to dashboard after success
+                        window.location.href = '/dashboard';  // Update with the correct dashboard URL
+                    } else {
+                        // Log the error message to the console and show an alert
+                        console.error('Error:', data.message);
+                        alert('Error: ' + data.message);  // Display the error message from backend
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            }
         {% comment %} // Function to show the alert when a voter is added successfully
         function showSuccessAlert() {
             let addAnother = confirm("Voter added successfully! Do you want to add another one?");
@@ -24,13 +54,15 @@
 <body>
     <h2>Add Mohalla</h2>
     <div class="form-container">
-        <form method="POST" action="{% url 'add_mohalla' %}">
-            <!-- Government Number -->
+        <form method="POST" action="{% url 'add_mohalla' %}" onsubmit="handleFormSubmit(event)">
+            {% csrf_token %}
+            <!-- Mohalla Name -->
             <div class="form-group">
                 <label for="mohalla_name">Mohalla Name: </label>
                 <input type="text" id="mohalla_name" name="mohalla_name" maxlength="150" required>
             </div>
-            <button type="submit" class="submit-btn">Add Voter</button>
+            <button type="submit" class="submit-btn">Add Mohalla</button>
         </form>
+    </div>
 </body>
 </html>

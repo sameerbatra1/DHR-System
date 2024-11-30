@@ -28,7 +28,8 @@ def add_mohalla_name(request):
                 'mohalla_name': form_name['mohalla_name']
             }
             mohalla_name_collection.insert_one(name)
-            return JsonResponse({'message': 'Voter added successfully!'}, status=200)
+            return JsonResponse({'success': True, 'message': 'Mohalla Name added successfully!'}, status=200)
+
         else:
             print("Form errors:", form.errors)  # This will show the specific field errors
             return JsonResponse({'message': 'Form is invalid', 'errors': form.errors}, status=400)
@@ -70,13 +71,8 @@ def add_voter(request):
     if request.method == 'GET':
         print("Getting Get Method")
         form = VoterForm()
-        
-        # # Check if the form has the mohalla_name choices populated
-        # print("Mohalla Name Choices in Form:", form.fields['mohalla_name'].choices)
-        
         return render(request, 'voter/add_voter.html', {'form': form})
-        # return render(request, 'voter/add_voter.html')
-
+    
     if request.method == 'POST':
         print("Getting POST Method")
         form = VoterForm(request.POST)
@@ -89,6 +85,13 @@ def add_voter(request):
             # Get form data
             voter_data = form.cleaned_data
             print("Form data:", voter_data)
+
+            # Check if CNIC already exists
+            existing_voter = voter_collection.find_one({'CNIC': voter_data['cnic']})
+            print(f"Existing Voter: {existing_voter}")
+            if existing_voter:
+                return JsonResponse({'message': 'CNIC already exists', 'errors': {'cnic': ['CNIC already exists.']}}, status=400)
+
             # Set family_code if not provided
             family_code = voter_data.get('family_code')
             if not family_code:
@@ -116,12 +119,12 @@ def add_voter(request):
             
             return JsonResponse({'message': 'Voter added successfully!'}, status=200)
         else:
-            print("Form errors:", form.errors)  # This will show the specific field errors
-            return JsonResponse({'message': 'Form is invalid', 'errors': form.errors}, status=400)
-    else:
-        form = VoterForm()
-    return JsonResponse({'message': 'Error Occurred!'}, status=400)
+            # Properly format and send errors
+            errors = {field: error_messages for field, error_messages in form.errors.items()}
+            print(f"errors: {errors}")
+            return JsonResponse({'success': False, 'errors': errors}, status=400)
 
+    return JsonResponse({'message': 'Error Occurred!'}, status=400)
 
 def view_all_voter(request):
     # Fetch all voters from the MongoDB collection and sort them by name

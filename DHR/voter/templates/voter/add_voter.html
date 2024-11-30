@@ -8,8 +8,49 @@
     <title>Add Voter</title>
     <link rel="stylesheet" href="{% static 'css/add_voter.css' %}">
     <script>
-        // Function to show the alert when a voter is added successfully
-        function showSuccessAlert() {
+        function addVoter(event){
+            event.preventDefault();
+        
+            const token = localStorage.getItem('access');
+            console.log('token: ', token);
+            if (token){
+                fetch('http://127.0.0.1:8000/add_voter/', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(new FormData(document.querySelector("form")))
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Voter Added successfully');
+                    } else {
+                        // Log errors to console
+                        console.log('errors: ', data.errors);
+                        if (data.errors) {
+                            let errorMessage = '';
+                            // Loop over each error field and message
+                            for (let field in data.errors) {
+                                // Join the error messages for each field
+                                errorMessage += `${field}: ${data.errors[field].join(', ')}\n`;
+                            }
+                            alert(errorMessage);
+                        } else {
+                            alert('An Error occurred: ' + (data.errors || 'Unknown Error'));
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            } else {
+                alert('No access token found. Please log in.');
+            }
+        }        // Function to show the alert when a voter is added successfully
+        {% comment %} function showSuccessAlert() {
             let addAnother = confirm("Voter added successfully! Do you want to add another one?");
             if (addAnother) {
                 // If yes, reload the form
@@ -18,7 +59,7 @@
                 // If no, redirect to view_all_voters
                 window.location.href = "{% url 'view_all_voters' %}";
             }
-        }
+        } {% endcomment %}
     </script>
 </head>
 <body>
@@ -98,7 +139,7 @@
                 <input type="text" id="block_number" name="block_number" maxlength="10">
             </div> {% endcomment %}
 
-            <button type="submit" class="submit-btn">Add Voter</button>
+            <button type="button" class="submit-btn" onclick="addVoter(event)">Add Voter</button>
         </form>
     
     <br> 

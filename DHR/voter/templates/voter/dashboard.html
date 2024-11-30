@@ -37,6 +37,12 @@
             alert('An error occurred. Please try again.');
         });
     }
+    function logout() {
+        // Step 1: Remove tokens from localStorage
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        window.location.href = '/login/';
+    }
 </script>
 
 <body>
@@ -44,6 +50,7 @@
 
     <div class="main_container">
         <div class="header">
+            <button onclick="logout()">Logout</button>
         </div>
         <div class="top_box">
             <div class="box_1" onclick="window.location.href='/users/'">

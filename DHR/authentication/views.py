@@ -243,12 +243,7 @@ def create_user_view(request):
             # Generate a unique user_id and store the time
             user_id = get_next_sequence_value('user_id')
             current_time = timezone.now()
-            print("Line 235")
-            # Ensure access_time is timezone-aware and convert to PKT (Asia/Karachi)
-            # Convert access_time to 'Asia/Karachi' timezone
-            # print(f"Access time before conversion: {access_time}, tzinfo: {access_time.tzinfo}")
-            # access_time = access_time.astimezone(pytz.timezone('Asia/Karachi'))
-            # print(f"Access time after conversion to PKT: {access_time}")    
+            print("Line 235")  
 
             superuser_data = {
                 'id': user_id,
@@ -272,8 +267,8 @@ def create_user_view(request):
             return JsonResponse({'success': True, 'message': 'Superuser created successfully'})
 
         else:
-            print("Form is invalid")
-            return JsonResponse({'success': False, 'message': 'Form validation failed'}, status=400)
+            errors = form.errors
+            return JsonResponse({'success': False, 'errors': errors}, status=400)
 
     else:
         # This should return if request method is not GET or POST

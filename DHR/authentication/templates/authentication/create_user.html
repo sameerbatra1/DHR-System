@@ -7,7 +7,7 @@
     <script>
         function createsuperuser(event) {
             event.preventDefault(); // Prevent the default form submission
-
+        
             const token = localStorage.getItem('access');  // Retrieve token from local storage
             console.log('Token: ', token);
             if (token) {
@@ -20,11 +20,23 @@
                     },
                     body: new URLSearchParams(new FormData(document.querySelector("form")))
                 })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Superuser created successfully');
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('User created successfully');
+                        console.log(window.location)
+                        window.location.href = '/dashboard';
                     } else {
-                        alert('You do not have permission to access this page.');
+                        // If there are errors, show them
+                        if (data.errors) {
+                            let errorMessage = '';
+                            for (let field in data.errors) {
+                                errorMessage += `${field}: ${data.errors[field].join(', ')}\n`;
+                            }
+                            alert(errorMessage);
+                        } else {
+                            alert('An error occurred: ' + (data.message || 'Unknown error'));
+                        }
                     }
                 })
                 .catch(error => {
@@ -35,6 +47,7 @@
                 alert('No access token found. Please log in.');
             }
         }
+        
     </script>
 </head>
 <body>
@@ -59,7 +72,7 @@
 
         <div>
             <label for="cnic">CNIC Number:</label>
-            <input type="text" id="cnic" name="cnic" required maxlength="13">
+            <input type="text" id="cnic" name="cnic" required maxlength="13" >
         </div>
 
         <div>

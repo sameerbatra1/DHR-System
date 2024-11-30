@@ -24,6 +24,7 @@ class SuperuserForm(forms.Form):
         min_length=13,
         required=True,
         widget=forms.TextInput(attrs={'pattern': r'\d+', 'title': 'Numeric CNIC only'})
+        
     )
 
     def clean_password(self):
@@ -44,3 +45,10 @@ class SuperuserForm(forms.Form):
         if access_time and access_time < timezone.now():
             raise ValidationError("Access time cannot be in the past.")
         return access_time
+    
+    def clean_cnic(self):
+        cnic = self.cleaned_data['cnic']
+        # Check if CNIC exists in the database
+        if users_collection.find_one({'cnic': cnic}):
+            raise ValidationError("CNIC already exists.")
+        return cnic

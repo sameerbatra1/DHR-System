@@ -3,10 +3,11 @@ from django import forms
 from .models import Voter
 from django import forms
 from mongo_config import db
+from django.core.exceptions import ValidationError
 
 
 mohalla_name_collection = db['MohallaName']
-
+voter_collection = db['voters']
 class VoterForm(forms.Form):
     government_number = forms.CharField(max_length=150)
     first_name = forms.CharField(max_length=100, required=True)
@@ -44,6 +45,13 @@ class VoterForm(forms.Form):
 
     # Mohalla name as a dropdown list
     mohalla_name = forms.ChoiceField(choices=[], required=True)
+
+    def clean_cnic(self):
+        cnic = self.cleaned_data['cnic']
+        # Check if CNIC exists in the database
+        if voter_collection.find_one({'cnic': cnic}):
+            raise ValidationError("CNIC already exists.")
+        return cnic
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
