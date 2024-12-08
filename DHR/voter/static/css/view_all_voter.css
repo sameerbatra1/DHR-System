@@ -72,17 +72,10 @@ tr:nth-child(even) {
     border-color: rgb(70, 69, 69);;
     border: 2px solid rgb(63, 63, 63);
     cursor: pointer;
+    transition: transform 0.2s;
 }
 
 .create_button:hover{
-    margin-top: 10px;
-    width: 60px;
-    height: 30px;
-    border-radius: 20px;
-    color: white;
-    background-color: rgb(58, 59, 59);
-    border-color: white;
-    border: 2px solid white;
     transform: scale(1.05);
     cursor: pointer;
 }

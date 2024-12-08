@@ -1,8 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/election_mode.css' %}">
     <title>Election Mode</title>
 </head>
 <script>
@@ -17,6 +19,7 @@
     }
 </script>
 <body>
+    <button class="exit_button" onclick="window.location.href = 'http://127.0.0.1:8000/dashboard/'">Exit</button>
     <div class="main_container">
         <div class="add_mohalla_name" onclick=redirectToAddMohallaName()>
             <h3>Add Mohalla Name</h3>

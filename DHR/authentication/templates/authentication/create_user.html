@@ -1,8 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'authentication/css/create_user.css' %}">
     <title>Create Superuser</title>
     <script>
         function createsuperuser(event) {
@@ -51,10 +53,11 @@
     </script>
 </head>
 <body>
-    <h2>Create User</h2>
+    <button class="exit_button" onclick="window.location.href = 'http://127.0.0.1:8000/users/'">Exit</button>
     <form method="POST">
         {% csrf_token %}
-        {% comment %} {{ form.as_p }} {% endcomment %}
+        {% comment %} {{ form.as_p }} {% endcomment %} 
+        <h2>Create User</h2>
         <div>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required maxlength="150">

@@ -1,8 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/election_mode_status.css' %}">
     <title>Activate Election Mode</title>
     <script>
         async function toggleElectionMode() {
@@ -52,6 +54,7 @@
     </script>
 </head>
 <body>
+    <button class="exit_button" onclick="window.location.href = 'http://127.0.0.1:8000/election_mode/'">Exit</button>
     <h1>Toggle Election Mode</h1>
     <p id="status">Click the button below to toggle election mode.</p>
     <button onclick="toggleElectionMode()">Toggle Election Mode</button>

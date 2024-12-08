@@ -52,6 +52,7 @@
     </script>
 </head>
 <body>
+    <button class="exit_button" onclick="window.location.href = 'http://127.0.0.1:8000/election_mode/'">Exit</button>
     <h2>Add Mohalla</h2>
     <div class="form-container">
         <form method="POST" action="{% url 'add_mohalla' %}" onsubmit="handleFormSubmit(event)">

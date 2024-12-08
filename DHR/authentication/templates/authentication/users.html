@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'authentication/css/users.css' %}">
     <title>Document</title>
 </head>
 <script>
@@ -67,6 +69,7 @@ function redirectToAddUsersPage(){
 }
 </script>
 <body>
+    <button class="exit_button" onclick="window.location.href = 'http://127.0.0.1:8000/dashboard/'">Exit</button>
     <div class="main_container">
         <div class="view_all_users" onclick="redirectToViewAllUsersPage()">
             <h3>View All Users</h3>
