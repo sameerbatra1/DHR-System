@@ -62,6 +62,19 @@ tr:nth-child(even) {
     margin-left: 60px;
 }
 
+.Logout_button{
+    position: absolute;
+    right: 40px;
+    top: 18px;
+    border-radius: 8px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+}
+.Logout_button:hover{
+    transform: scale(1.05);
+}
 .create_button{
     margin-top: 10px;
     width: 10%;
@@ -121,4 +134,31 @@ tr:nth-child(even) {
 
 .show-data{
    margin: 20px;
+}
+
+.search-container {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.search-input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-btn {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
 }

@@ -14,16 +14,8 @@
         <div class="inner_div">
             <div class="header">
                 <h2 class="heading">List of All Voters</h2>
-                <button class="Logout_button" onclick="window.location.href = 'http://127.0.0.1:8000/login/'">Logout</button>
+                <button class="Logout_button" onclick="window.location.href = 'http://127.0.0.1:8000/dashboard/'">Exit</button>
             </div>
-
-            <div class="search-container">
-                <form method="GET" action="{% url 'view_all_voters' %}">
-                    <input type="text" name="q" placeholder="Search by name, CNIC, or any field..." class="search-input" value="{{ request.GET.q }}">
-                    <button type="submit" class="search-btn">Search</button>
-                </form>
-            </div>
-            
             
             <div class="show-data">
                 <button class="create_button" onclick="GoToAdd()">Add Voter</button>

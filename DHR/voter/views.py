@@ -136,6 +136,20 @@ def view_all_voter(request):
 
     return render(request, 'voter/view_all_voter.html', {'voters': voters})
 
+    query = request.GET.get('q', '')  # Get the search query from the URL
+    if query:
+        voters = Voter.objects.filter(
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query) |
+            Q(CNIC__icontains=query) |
+            Q(mohalla_name__icontains=query) |
+            Q(mobile_number__icontains=query)
+        )
+    else:
+        voters = Voter.objects.all()
+    
+    return render(request, 'view_all_voters.html', {'voters': voters})
+
 
 @csrf_exempt
 def delete_voter(request, user_id):
